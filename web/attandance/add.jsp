@@ -18,20 +18,30 @@
     </head>
     <body>
         <form method="POST" action="add">
-            Id:<input type="text" name="id"/> <br/>
-            Name: <input type="text" name="name" /> <br/>
-            Gender: <input type="radio" name="gender" value="male" />Male
-            <input type="radio" name="gender" value="female" />Female <br/>
-            Dob: <input type="date" name="dob"/>(yyyy-MM-dd)<br/>
-            Department: 
-            <select name="did">
+            
+            Group: 
+            <select name="groupid">
+                <% for (Department d : depts) {
+                %>
+                <option value="<%=d.getId() %>"><%=d.getName() %></option>
+                <%}%>
+            </select>
+            Date: 
+            <select name="dateid">
+                <% for (Department d : depts) {
+                %>
+                <option value="<%=d.getId() %>"><%=d.getName() %></option>
+                <%}%>
+            </select>
+            Slot: 
+            <select name="slotid">
                 <% for (Department d : depts) {
                 %>
                 <option value="<%=d.getId() %>"><%=d.getName() %></option>
                 <%}%>
             </select>
             <br/>
-            <input type="submit" value="Save"/>
+            <input type="submit" value="Go"/>
         </form> 
     </body>
 </html>
