@@ -7,6 +7,7 @@ package Controller;
 
 import dal.ClassDBContext;
 import dal.GroupDBContext;
+import dal.StudentDBContext;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.Class1;
 import model.Group;
+import model.Student;
 
 /**
  *
@@ -40,7 +42,7 @@ public class AttandanceController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet AttandanceController</title>");            
+            out.println("<title>Servlet AttandanceController</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet AttandanceController at " + request.getContextPath() + "</h1>");
@@ -69,8 +71,10 @@ public class AttandanceController extends HttpServlet {
         request.setAttribute("dates", Class2);
         request.getRequestDispatcher("/attandance/add.jsp").forward(request, response);
     }
-     GroupDBContext grDB = new GroupDBContext();
-     ClassDBContext clDB = new ClassDBContext();    
+    GroupDBContext grDB = new GroupDBContext();
+    ClassDBContext clDB = new ClassDBContext();
+    StudentDBContext stuDB = new StudentDBContext();
+
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -82,10 +86,18 @@ public class AttandanceController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String groupid =request.getParameter("groupid");
+        String groupid = request.getParameter("groupid");
         String slot = request.getParameter("slotid");
         String date = request.getParameter("dateid");
-        int classId = clDB.getClassID(date, slot, groupid);
+        ArrayList<Class1> classId = clDB.getClassID(date, slot, groupid);
+        if (classId.size() > 0) {
+            ArrayList<Student> students = stuDB.getAllStudentofGroup(groupid);
+            request.setAttribute("students", students);
+            request.getRequestDispatcher("/attandance/listAttan.jsp").forward(request, response);
+        } else {
+            response.getWriter().println("Xin chon lai");
+        }
+
     }
 
     /**

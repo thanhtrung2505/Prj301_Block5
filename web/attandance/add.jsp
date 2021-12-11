@@ -4,10 +4,12 @@
     Author     : Do Phong PC
 --%>
 
+<%@page import="model.Student"%>
 <%@page import="model.Class1"%>
 <%@page import="model.Group"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -16,13 +18,11 @@
         <%
             ArrayList<Group> groups = (ArrayList<Group>) request.getAttribute("groups");
             ArrayList<Class1>classe1= (ArrayList<Class1>) request.getAttribute("slots");
-            ArrayList<Class1>classe2= (ArrayList<Class1>) request.getAttribute("dates");
-            
+            ArrayList<Class1>classe2= (ArrayList<Class1>) request.getAttribute("dates");                      
         %>
     </head>
     <body>
-        <form method="POST" action="att">
-            
+        <form method="POST" action="att">           
             Group: 
             <select name="groupid">
                 <% for (Group d : groups) {
@@ -44,8 +44,8 @@
                 <option value="<%=d.getSlot()%>"><%=d.getSlot()%></option>
                 <%}%>
             </select>
-            <br/>
-            <input type="submit" value="Go"/>
+            <br/>         
+            <input type="submit" value="Save"/>
         </form> 
     </body>
 </html>

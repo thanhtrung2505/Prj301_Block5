@@ -91,24 +91,24 @@ public class ClassDBContext extends DBContext {
         return depts;
     }
 
-    public int getClassID(String date, String slot, String groupid) {
-        int ClassID = 0;
+    public  ArrayList<Class1> getClassID(String date, String slot, String groupid) {
+         ArrayList<Class1> depts = new ArrayList<>();
         try {
             String sql = "SELECT [classid]\n"
                     + "  FROM [dbo].[Class]\n"
-                    + "  where (1=1) and date = '?' and slot =? and groupid = ?";
+                    + "  where date = '"+date+"' and slot ="+slot+" and groupid ="+groupid+"";
             PreparedStatement stm = connection.prepareStatement(sql);
-            stm.setString(1, date);
-            stm.setString(2, slot);
-            stm.setString(3, groupid);
+      
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
-                ClassID = rs.getInt("classid");
+                Class1 d = new Class1();
+                d.setClassid(rs.getInt("classid"));
+                depts.add(d);
             }
 
         } catch (SQLException ex) {
             Logger.getLogger(ClassDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return ClassID;
+        return depts;
     }
 }
