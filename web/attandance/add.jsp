@@ -4,7 +4,8 @@
     Author     : Do Phong PC
 --%>
 
-<%@page import="model.Department"%>
+<%@page import="model.Class1"%>
+<%@page import="model.Group"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -13,31 +14,34 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
         <%
-            ArrayList<Department> depts = (ArrayList<Department>) request.getAttribute("depts");
+            ArrayList<Group> groups = (ArrayList<Group>) request.getAttribute("groups");
+            ArrayList<Class1>classe1= (ArrayList<Class1>) request.getAttribute("slots");
+            ArrayList<Class1>classe2= (ArrayList<Class1>) request.getAttribute("dates");
+            
         %>
     </head>
     <body>
-        <form method="POST" action="add">
+        <form method="POST" action="att">
             
             Group: 
             <select name="groupid">
-                <% for (Department d : depts) {
+                <% for (Group d : groups) {
                 %>
-                <option value="<%=d.getId() %>"><%=d.getName() %></option>
+                <option value="<%=d.getGroupid()%>"><%=d.getGroupName()%></option>
                 <%}%>
             </select>
             Date: 
             <select name="dateid">
-                <% for (Department d : depts) {
+                <% for (Class1 d : classe2) {
                 %>
-                <option value="<%=d.getId() %>"><%=d.getName() %></option>
+                <option value="<%=d.getDate()%>"><%=d.getDate()%></option>
                 <%}%>
             </select>
             Slot: 
             <select name="slotid">
-                <% for (Department d : depts) {
+                <% for (Class1 d :classe1) {
                 %>
-                <option value="<%=d.getId() %>"><%=d.getName() %></option>
+                <option value="<%=d.getSlot()%>"><%=d.getSlot()%></option>
                 <%}%>
             </select>
             <br/>

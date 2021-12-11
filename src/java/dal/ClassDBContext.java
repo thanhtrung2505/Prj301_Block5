@@ -48,4 +48,67 @@ public class ClassDBContext extends DBContext {
         }
         return depts;
     }
+
+    public ArrayList<Class1> getSlot() {
+        ArrayList<Class1> depts = new ArrayList<>();
+        try {
+            String sql = "SELECT DISTINCT  \n"
+                    + "      [slot]\n"
+                    + "  FROM [dbo].[Class]";
+
+            PreparedStatement stm = connection.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Class1 d = new Class1();
+                d.setSlot(rs.getInt("slot"));
+                depts.add(d);
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(ClassDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return depts;
+    }
+
+    public ArrayList<Class1> getDate() {
+        ArrayList<Class1> depts = new ArrayList<>();
+        try {
+            String sql = "SELECT DISTINCT \n"
+                    + "      [date]\n"
+                    + "  FROM [dbo].[Class]";
+
+            PreparedStatement stm = connection.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Class1 d = new Class1();
+                d.setDate(rs.getDate("date"));
+                depts.add(d);
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(ClassDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return depts;
+    }
+
+    public int getClassID(String date, String slot, String groupid) {
+        int ClassID = 0;
+        try {
+            String sql = "SELECT [classid]\n"
+                    + "  FROM [dbo].[Class]\n"
+                    + "  where (1=1) and date = '?' and slot =? and groupid = ?";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setString(1, date);
+            stm.setString(2, slot);
+            stm.setString(3, groupid);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                ClassID = rs.getInt("classid");
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(ClassDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return ClassID;
+    }
 }
