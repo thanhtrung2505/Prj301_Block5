@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Class1;
+import model.DetailAttandance;
 
 /**
  *
@@ -19,26 +20,25 @@ import model.Class1;
  */
 public class ClassDBContext extends DBContext {
 
-    public ArrayList<Class1> getAllClass() {
-        ArrayList<Class1> depts = new ArrayList<>();
+    public ArrayList<DetailAttandance> getDetailAttandanceClass(String classid) {
+        ArrayList<DetailAttandance> depts = new ArrayList<>();
         try {
-            String sql = "SELECT [classid]\n"
-                    + "      ,[groupid]\n"
-                    + "      ,[date]\n"
-                    + "      ,[slot]\n"
-                    + "      ,[subid]\n"
-                    + "      ,[className]\n"
-                    + "  FROM [dbo].[Class]";
+            String sql = "select  g.groupName, c.date,c.slot,s.studentName,s.studentCode,a.present,su.subName, c.className from Class c,"
+                    + " Student s, Subject su,Attandance a,[Group] g where s.studentID = a.studentID and g.groupid = s.groupid and"
+                    + " c.classid = a.classid and su.subid = c.subid and c.classid = ?";
 
             PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setString(1, classid);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
-                Class1 d = new Class1();
-                d.setClassid(rs.getInt("classid"));
-                d.setGroupid(rs.getInt("groupid"));
+                DetailAttandance d = new DetailAttandance();
+                d.setGroupName(rs.getInt("groupName"));              
                 d.setDate(rs.getDate("date"));
                 d.setSlot(rs.getInt("slot"));
-                d.setSubid(rs.getInt("subid"));
+                d.setStuName(rs.getString("studentName"));  
+                d.setStuCode(rs.getString("studentCode"));
+                d.setPresent(rs.getBoolean("present"));
+                d.setSubName(rs.getString("subName"));
                 d.setClassName(rs.getString("className"));
                 depts.add(d);
             }

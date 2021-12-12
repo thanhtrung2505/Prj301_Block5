@@ -32,9 +32,9 @@
                     <td>${s.stuCode}<input type="hidden" name="code" /></td>
                     <td><input type="checkbox" name="present${s.stuID}" value="present" /></td>
                 </tr>  
-            </c:forEach>
-            <input type="submit" value="Save"/>
+            </c:forEach>          
         </table>
+             <input type="submit" value="Save"/>
               <%}else{%>
         No result
         <%}%>
