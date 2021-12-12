@@ -5,25 +5,26 @@
  */
 package Controller;
 
-import dal.AttandanceDBContext;
+import dal.ClassDBContext;
+import dal.GroupDBContext;
 import dal.StudentDBContext;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Date;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.Attandance;
+import model.Class1;
+import model.Group;
 import model.Student;
 
 /**
  *
  * @author Do Phong PC
  */
-public class AttandanceController extends HttpServlet {
+public class ListStudentController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,8 +37,19 @@ public class AttandanceController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String groupid = (String) request.getAttribute("groupid");
-
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet AttandanceController</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet AttandanceController at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -52,8 +64,17 @@ public class AttandanceController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        ArrayList<Group> groups = grDB.getAllGroup();
+        ArrayList<Class1> Class1 = clDB.getSlot();
+        ArrayList<Class1> Class2 = clDB.getDate();
+        request.setAttribute("groups", groups);
+        request.setAttribute("slots", Class1);
+        request.setAttribute("dates", Class2);
+        request.getRequestDispatcher("/attandance/add.jsp").forward(request, response);
     }
+    GroupDBContext grDB = new GroupDBContext();
+    ClassDBContext clDB = new ClassDBContext();
+    StudentDBContext stuDB = new StudentDBContext();
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -64,29 +85,30 @@ public class AttandanceController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
+    @SuppressWarnings("empty-statement")
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String clid = "";
-        Cookie[] a = request.getCookies();
-        for (Cookie cookie : a) {
-            if (cookie.getName().equals("id")) {
-                clid = cookie.getValue();
-            }
+        String groupid = request.getParameter("groupid");
+        String slot = request.getParameter("slotid");
+        String date = request.getParameter("dateid");
+        ArrayList<Class1> classid = clDB.getClassID(date, slot, groupid);
+       // request.setAttribute("groupid", groupid);          
+        ArrayList<Student> students = stuDB.getAllStudentofGroup(groupid);
+        request.setAttribute("students", students);
+          int a =0;
+          for (Class1 class1 : classid ) {
+          a = class1.getClassid();
         }
-        String[] ids = request.getParameterValues("id");
-        ArrayList<Attandance> atts = new ArrayList<>();
-        for (String id : ids) {
-            Attandance at = new Attandance();
-            Student s = new Student();
-            s.setStuID(Integer.parseInt(id));
-            at.setStudent(s);
-            at.setClassid(Integer.parseInt(clid));
-            at.setPresent(request.getParameter("present" + id) != null);
-            atts.add(at);
+        Cookie claid = new Cookie("id",""+a); 
+        //response.getWriter().println(a);
+        claid.setMaxAge(3600);
+        response.addCookie(claid);
+        if (classid.size() > 0) {
+          request.getRequestDispatcher("/attandance/listAttan.jsp").forward(request, response);
+        } else {
+            response.getWriter().println("Xin chon lai");
         }
-        AttandanceDBContext db = new AttandanceDBContext();
-        db.insert(atts);
-        response.getWriter().println("done");
+
     }
 
     /**

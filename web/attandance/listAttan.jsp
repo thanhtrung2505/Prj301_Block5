@@ -18,6 +18,7 @@
           %>
     </head>
     <body>
+           <form method="POST" action="attan">          
         <%if(students.size()>0){ %>          
             <table border="1px">
             <tr>
@@ -32,9 +33,11 @@
                     <td><input type="checkbox" name="present${s.stuID}" value="present" /></td>
                 </tr>  
             </c:forEach>
+            <input type="submit" value="Save"/>
         </table>
               <%}else{%>
         No result
         <%}%>
+        </form>
     </body>
 </html>

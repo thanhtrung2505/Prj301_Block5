@@ -46,5 +46,5 @@ public class Student {
     public void setStuGroup(int stuGroup) {
         this.stuGroup = stuGroup;
     }
-   
+
 }

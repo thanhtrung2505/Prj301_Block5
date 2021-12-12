@@ -22,7 +22,7 @@
         %>
     </head>
     <body>
-        <form method="POST" action="att">           
+        <form method="POST" action="list">           
             Group: 
             <select name="groupid">
                 <% for (Group d : groups) {
