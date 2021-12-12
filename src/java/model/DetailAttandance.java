@@ -12,8 +12,8 @@ import java.sql.Date;
  * @author Do Phong PC
  */
 public class DetailAttandance {
-
-    private int groupName;
+    private int classid;
+    private String groupName;
     private Date date;
     private int slot;
     private String stuName;
@@ -22,11 +22,19 @@ public class DetailAttandance {
     private String subName;
     private String className;
 
-    public int getGroupName() {
+    public int getClassid() {
+        return classid;
+    }
+
+    public void setClassid(int classid) {
+        this.classid = classid;
+    }
+
+    public String getGroupName() {
         return groupName;
     }
 
-    public void setGroupName(int groupName) {
+    public void setGroupName(String groupName) {
         this.groupName = groupName;
     }
 

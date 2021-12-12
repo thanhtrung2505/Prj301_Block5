@@ -6,6 +6,7 @@
 package Controller;
 
 import dal.AttandanceDBContext;
+import dal.ClassDBContext;
 import dal.StudentDBContext;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -16,7 +17,9 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import model.Attandance;
+import model.DetailAttandance;
 import model.Student;
 
 /**
@@ -85,8 +88,19 @@ public class AttandanceController extends HttpServlet {
             atts.add(at);
         }
         AttandanceDBContext db = new AttandanceDBContext();
-        db.insert(atts);
-        response.getWriter().println("done");
+        ArrayList<Attandance> isExist = (ArrayList<Attandance>) db.getClassId(clid);
+        if (isExist.size() < 0) {
+            db.insert(atts);
+            ClassDBContext clDB = new ClassDBContext();
+            ArrayList<DetailAttandance> detailAt = (ArrayList<DetailAttandance>) clDB.getDetailAttandanceClass(clid);
+            if (detailAt.size() > 0) {
+                request.setAttribute("detailAt", detailAt);
+                request.getRequestDispatcher("/attandance/detail.jsp").forward(request, response);
+            }
+        } else {
+            response.getWriter().println("Slot này đã được điểm danh");
+        }
+
     }
 
     /**

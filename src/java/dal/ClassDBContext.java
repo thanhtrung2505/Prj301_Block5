@@ -23,7 +23,7 @@ public class ClassDBContext extends DBContext {
     public ArrayList<DetailAttandance> getDetailAttandanceClass(String classid) {
         ArrayList<DetailAttandance> depts = new ArrayList<>();
         try {
-            String sql = "select  g.groupName, c.date,c.slot,s.studentName,s.studentCode,a.present,su.subName, c.className from Class c,"
+            String sql = "select c.classid, g.groupName, c.date,c.slot,s.studentName,s.studentCode,a.present,su.subName, c.className from Class c,"
                     + " Student s, Subject su,Attandance a,[Group] g where s.studentID = a.studentID and g.groupid = s.groupid and"
                     + " c.classid = a.classid and su.subid = c.subid and c.classid = ?";
 
@@ -32,7 +32,8 @@ public class ClassDBContext extends DBContext {
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 DetailAttandance d = new DetailAttandance();
-                d.setGroupName(rs.getInt("groupName"));              
+                d.setClassid(rs.getInt("classid"));  
+                d.setGroupName(rs.getString("groupName"));              
                 d.setDate(rs.getDate("date"));
                 d.setSlot(rs.getInt("slot"));
                 d.setStuName(rs.getString("studentName"));  
