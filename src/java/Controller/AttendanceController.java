@@ -5,8 +5,9 @@
  */
 package Controller;
 
-import dal.AttandanceDBContext;
+import dal.AttendanceDBContext;
 import dal.ClassDBContext;
+import dal.DetailAttendanceDBContext;
 import dal.StudentDBContext;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -18,15 +19,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import model.Attandance;
-import model.DetailAttandance;
+import model.Attendance;
+import model.DetailAttendance;
 import model.Student;
 
 /**
  *
  * @author Do Phong PC
  */
-public class AttandanceController extends HttpServlet {
+public class AttendanceController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,8 +39,7 @@ public class AttandanceController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String groupid = (String) request.getAttribute("groupid");
+            throws ServletException, IOException {       
 
     }
 
@@ -55,7 +55,50 @@ public class AttandanceController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+ String clid = "";
+        Cookie[] a = request.getCookies();
+        for (Cookie cookie : a) {
+            if (cookie.getName().equals("id")) {
+                clid = cookie.getValue();
+            }
+        }
+        String[] ids = request.getParameterValues("id");
+        ArrayList<Attendance> atts = new ArrayList<>();
+        for (String id : ids) {
+            Attendance at = new Attendance();
+            Student s = new Student();
+            s.setStuID(Integer.parseInt(id));
+            at.setStudent(s);
+            at.setClassid(Integer.parseInt(clid));
+            at.setPresent(request.getParameter("present" + id) != null);
+            atts.add(at);
+        }
+        AttendanceDBContext db = new AttendanceDBContext();
+        ArrayList<Attendance> isExist = db.getClassId(clid);
+        if (isExist.size() > 0) {
+              response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet ArticleController</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>This slot has been attended before </h1>");
+            out.println("<input type=\"submit\" value=\"Return\" onclick=\"window.location.href='http://localhost:43899/Prj301_Block5/list'\"/>");
+            out.println("</body>");
+            out.println("</html>");
+        }             
+       } else {
+            db.insert(atts);
+            DetailAttendanceDBContext clDB = new DetailAttendanceDBContext();
+            ArrayList<DetailAttendance> detailAt = (ArrayList<DetailAttendance>) clDB.getDetailAttandanceClass(clid);
+            if (detailAt.size() > 0) {
+                request.setAttribute("detailAt", detailAt);
+                request.getRequestDispatcher("/attandance/detail.jsp").forward(request, response);
+            }
+        }
     }
 
     /**
@@ -69,37 +112,7 @@ public class AttandanceController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String clid = "";
-        Cookie[] a = request.getCookies();
-        for (Cookie cookie : a) {
-            if (cookie.getName().equals("id")) {
-                clid = cookie.getValue();
-            }
-        }
-        String[] ids = request.getParameterValues("id");
-        ArrayList<Attandance> atts = new ArrayList<>();
-        for (String id : ids) {
-            Attandance at = new Attandance();
-            Student s = new Student();
-            s.setStuID(Integer.parseInt(id));
-            at.setStudent(s);
-            at.setClassid(Integer.parseInt(clid));
-            at.setPresent(request.getParameter("present" + id) != null);
-            atts.add(at);
-        }
-        AttandanceDBContext db = new AttandanceDBContext();
-        ArrayList<Attandance> isExist = (ArrayList<Attandance>) db.getClassId(clid);
-        if (isExist.size() < 0) {
-            db.insert(atts);
-            ClassDBContext clDB = new ClassDBContext();
-            ArrayList<DetailAttandance> detailAt = (ArrayList<DetailAttandance>) clDB.getDetailAttandanceClass(clid);
-            if (detailAt.size() > 0) {
-                request.setAttribute("detailAt", detailAt);
-                request.getRequestDispatcher("/attandance/detail.jsp").forward(request, response);
-            }
-        } else {
-            response.getWriter().println("Slot này đã được điểm danh");
-        }
+       
 
     }
 

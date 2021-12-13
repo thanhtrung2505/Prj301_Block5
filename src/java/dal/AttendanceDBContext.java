@@ -11,26 +11,23 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Attandance;
+import model.Attendance;
 import model.Class1;
 
 /**
  *
  * @author Do Phong PC
  */
-public class AttandanceDBContext extends DBContext {
+public class AttendanceDBContext extends DBContext {
 
-    public ArrayList<Attandance> getClassId(String classid) {
-        ArrayList<Attandance> depts = new ArrayList<>();
+    public ArrayList<Attendance> getClassId(String classid) {
+        ArrayList<Attendance> depts = new ArrayList<>();
         try {
-            String sql = "SELECT DISTINCT  \n"
-                    + "      [classid]\n"
-                    + "  FROM [dbo].[Attandance] where classid  = "+classid+"";
-
+            String sql = "SELECT  classid from [Attandance] where classid  = "+classid+"";
             PreparedStatement stm = connection.prepareStatement(sql);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
-                Attandance d = new Attandance();
+                Attendance d = new Attendance();
                 d.setClassid(rs.getInt("classid"));
                 depts.add(d);
             }
@@ -41,11 +38,11 @@ public class AttandanceDBContext extends DBContext {
         return depts;
     }
 
-    public void insert(ArrayList<Attandance> atts) {
+    public void insert(ArrayList<Attendance> atts) {
         try {
             connection.setAutoCommit(false);
             String sql = "INSERT INTO [Attandance]([studentID],[classid],[present]) VALUES (?,?,?)";
-            for (Attandance att : atts) {
+            for (Attendance att : atts) {
                 PreparedStatement stm = connection.prepareStatement(sql);
                 stm.setInt(1, att.getStudent().getStuID());
                 stm.setInt(2, att.getClassid());
@@ -54,17 +51,17 @@ public class AttandanceDBContext extends DBContext {
             }
             connection.commit();
         } catch (SQLException ex) {
-            Logger.getLogger(AttandanceDBContext.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AttendanceDBContext.class.getName()).log(Level.SEVERE, null, ex);
             try {
                 connection.rollback();
             } catch (SQLException ex1) {
-                Logger.getLogger(AttandanceDBContext.class.getName()).log(Level.SEVERE, null, ex1);
+                Logger.getLogger(AttendanceDBContext.class.getName()).log(Level.SEVERE, null, ex1);
             }
         } finally {
             try {
                 connection.setAutoCommit(true);
             } catch (SQLException ex) {
-                Logger.getLogger(AttandanceDBContext.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(AttendanceDBContext.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 

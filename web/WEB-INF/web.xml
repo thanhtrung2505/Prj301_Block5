@@ -6,7 +6,11 @@
     </servlet>
     <servlet>
         <servlet-name>AttandanceController1</servlet-name>
-        <servlet-class>Controller.AttandanceController</servlet-class>
+        <servlet-class>Controller.AttendanceController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditAttendanceController</servlet-name>
+        <servlet-class>Controller.EditAttendanceController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>AttandanceController</servlet-name>
@@ -15,6 +19,10 @@
     <servlet-mapping>
         <servlet-name>AttandanceController1</servlet-name>
         <url-pattern>/attan</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditAttendanceController</servlet-name>
+        <url-pattern>/edit</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

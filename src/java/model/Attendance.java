@@ -9,7 +9,7 @@ package model;
  *
  * @author Do Phong PC
  */
-public class Attandance {
+public class Attendance {
  private int atid;
   private Student student;
  private int classid;

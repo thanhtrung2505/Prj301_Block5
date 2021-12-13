@@ -5,7 +5,9 @@
  */
 package Controller;
 
+import dal.AttendanceDBContext;
 import dal.ClassDBContext;
+import dal.DetailAttendanceDBContext;
 import dal.GroupDBContext;
 import dal.StudentDBContext;
 import java.io.IOException;
@@ -16,7 +18,9 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.Attendance;
 import model.Class1;
+import model.DetailAttendance;
 import model.Group;
 import model.Student;
 
@@ -103,12 +107,35 @@ public class ListStudentController extends HttpServlet {
         //response.getWriter().println(a);
         claid.setMaxAge(3600);
         response.addCookie(claid);
+        //neu slot da duoc diem danh se di thang den detail
+        AttendanceDBContext db = new AttendanceDBContext();
+        ArrayList<Attendance> isExist = db.getClassId(""+a);
+        if (isExist.size() > 0) {
+           DetailAttendanceDBContext clDB = new DetailAttendanceDBContext();
+            ArrayList<DetailAttendance> detailAt = (ArrayList<DetailAttendance>) clDB.getDetailAttandanceClass(""+a);
+            if (detailAt.size() > 0) {
+                request.setAttribute("detailAt", detailAt);
+                request.getRequestDispatcher("/attandance/detail.jsp").forward(request, response);
+            }
+        }
         if (classid.size() > 0) {
           request.getRequestDispatcher("/attandance/listAttan.jsp").forward(request, response);
         } else {
-            response.getWriter().println("Xin chon lai");
+           try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet ArticleController</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1> This class does not exist </h1>");
+            out.println("<input type=\"submit\" value=\"Return\" onclick=\"window.location.href='http://localhost:43899/Prj301_Block5/list'\"/>");
+            out.println("</body>");
+            out.println("</html>");
+        }    
         }
-
+        
     }
 
     /**

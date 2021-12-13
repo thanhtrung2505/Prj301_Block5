@@ -11,7 +11,7 @@ import java.sql.Date;
  *
  * @author Do Phong PC
  */
-public class DetailAttandance {
+public class DetailAttendance {
     private int classid;
     private String groupName;
     private Date date;
