@@ -39,7 +39,7 @@ public class AttendanceController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {       
+            throws ServletException, IOException {
 
     }
 
@@ -55,7 +55,7 @@ public class AttendanceController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
- String clid = "";
+        String clid = "";
         Cookie[] a = request.getCookies();
         for (Cookie cookie : a) {
             if (cookie.getName().equals("id")) {
@@ -74,30 +74,12 @@ public class AttendanceController extends HttpServlet {
             atts.add(at);
         }
         AttendanceDBContext db = new AttendanceDBContext();
-        ArrayList<Attendance> isExist = db.getClassId(clid);
-        if (isExist.size() > 0) {
-              response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ArticleController</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>This slot has been attended before </h1>");
-            out.println("<input type=\"submit\" value=\"Return\" onclick=\"window.location.href='http://localhost:43899/Prj301_Block5/list'\"/>");
-            out.println("</body>");
-            out.println("</html>");
-        }             
-       } else {
-            db.insert(atts);
-            DetailAttendanceDBContext clDB = new DetailAttendanceDBContext();
-            ArrayList<DetailAttendance> detailAt = (ArrayList<DetailAttendance>) clDB.getDetailAttandanceClass(clid);
-            if (detailAt.size() > 0) {
-                request.setAttribute("detailAt", detailAt);
-                request.getRequestDispatcher("/attandance/detail.jsp").forward(request, response);
-            }
+        db.insert(atts);
+        DetailAttendanceDBContext clDB = new DetailAttendanceDBContext();
+        ArrayList<DetailAttendance> detailAt = (ArrayList<DetailAttendance>) clDB.getDetailAttandanceClass(clid);
+        if (detailAt.size() > 0) {
+            request.setAttribute("detailAt", detailAt);
+            request.getRequestDispatcher("/attandance/detail.jsp").forward(request, response);
         }
     }
 
@@ -112,7 +94,6 @@ public class AttendanceController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       
 
     }
 

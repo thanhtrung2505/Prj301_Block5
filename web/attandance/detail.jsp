@@ -17,6 +17,7 @@
         <%ArrayList<DetailAttendance> DetailClass = (ArrayList<DetailAttendance>) request.getAttribute("detailAt");%>
     </head>
     <body>
+        Details
         <form method="POST" action="add">
             <table border="1px">
                 <tr>
@@ -28,13 +29,14 @@
                     <td>Present</td> 
                     <td>Subject</td>
                     <td>Room</td> 
+                    <td>Edit</td> 
 
                 </tr>
                 <% for (DetailAttendance x : DetailClass) {%>     
                 <tr>
                     <input type="hidden" name="classid" value="<%=x.getClassid()%>" />
                     <td><%=x.getGroupName()%></td>
-                    <td> <input type="date" value="<%=x.getDate()%>" /></td>
+                    <td><%=x.getDate()%></td>
                     <td><%=x.getSlot()%> </td>
                     <td><%=x.getStuName()%></td>
                     <td><%=x.getStuCode()%></td>
@@ -44,7 +46,7 @@
                     <td><%=x.getSubName()%></td>
                     <td><%=x.getClassName()%></td>   
                      <td>
-                        <input type="button" value="Edit" onclick="window.location.href='edit?classid=<%=x.getClassid()%>?stuid=<%%>'"/> 
+                        <input type="button" value="Edit" onclick="window.location.href='edit?classid=<%=x.getClassid()%>&stuid=<%=x.getStuid()%>'"/> 
                      <td>
                 </tr>
                 <%}%>

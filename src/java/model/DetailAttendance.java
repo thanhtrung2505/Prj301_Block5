@@ -13,6 +13,7 @@ import java.sql.Date;
  */
 public class DetailAttendance {
     private int classid;
+    private int stuid;
     private String groupName;
     private Date date;
     private int slot;
@@ -21,6 +22,14 @@ public class DetailAttendance {
     private boolean present;
     private String subName;
     private String className;
+
+    public int getStuid() {
+        return stuid;
+    }
+
+    public void setStuid(int stuid) {
+        this.stuid = stuid;
+    }
 
     public int getClassid() {
         return classid;

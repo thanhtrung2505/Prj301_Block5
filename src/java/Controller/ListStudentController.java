@@ -103,21 +103,23 @@ public class ListStudentController extends HttpServlet {
           for (Class1 class1 : classid ) {
           a = class1.getClassid();
         }
-        Cookie claid = new Cookie("id",""+a); 
-        //response.getWriter().println(a);
+        Cookie claid = new Cookie("id",""+a);      
         claid.setMaxAge(3600);
         response.addCookie(claid);
+        
         //neu slot da duoc diem danh se di thang den detail
         AttendanceDBContext db = new AttendanceDBContext();
         ArrayList<Attendance> isExist = db.getClassId(""+a);
         if (isExist.size() > 0) {
-           DetailAttendanceDBContext clDB = new DetailAttendanceDBContext();
-            ArrayList<DetailAttendance> detailAt = (ArrayList<DetailAttendance>) clDB.getDetailAttandanceClass(""+a);
-            if (detailAt.size() > 0) {
-                request.setAttribute("detailAt", detailAt);
-                request.getRequestDispatcher("/attandance/detail.jsp").forward(request, response);
-            }
+//           DetailAttendanceDBContext clDB = new DetailAttendanceDBContext();
+//            ArrayList<DetailAttendance> detailAt = (ArrayList<DetailAttendance>) clDB.getDetailAttandanceClass(""+a);
+//            if (detailAt.size() > 0) {
+//                request.setAttribute("detailAt", detailAt);
+//                request.getRequestDispatcher("/attandance/detail.jsp").forward(request, response);
+//            }
+             response.sendRedirect("listdetail");
         }
+        try{
         if (classid.size() > 0) {
           request.getRequestDispatcher("/attandance/listAttan.jsp").forward(request, response);
         } else {
@@ -135,7 +137,7 @@ public class ListStudentController extends HttpServlet {
             out.println("</html>");
         }    
         }
-        
+        }catch(Exception e){}
     }
 
     /**

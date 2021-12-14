@@ -18,6 +18,7 @@
           %>
     </head>
     <body>
+        <h4>Attendance<h4>
            <form method="POST" action="attan">          
         <%if(students.size()>0){ %>          
             <table border="1px">

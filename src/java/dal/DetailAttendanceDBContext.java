@@ -17,11 +17,12 @@ import model.DetailAttendance;
  *
  * @author Do Phong PC
  */
-public class DetailAttendanceDBContext extends DBContext{
-     public ArrayList<DetailAttendance> getDetailAttandanceClass(String classid) {
+public class DetailAttendanceDBContext extends DBContext {
+
+    public ArrayList<DetailAttendance> getDetailAttandanceClass(String classid) {
         ArrayList<DetailAttendance> depts = new ArrayList<>();
         try {
-            String sql = "select c.classid, g.groupName, c.date,c.slot,s.studentName,s.studentCode,a.present,su.subName, c.className from Class c,"
+            String sql = "select c.classid,s.studentID,g.groupName, c.date,c.slot,s.studentName,s.studentCode,a.present,su.subName, c.className from Class c,"
                     + " Student s, Subject su,Attandance a,[Group] g where s.studentID = a.studentID and g.groupid = s.groupid and"
                     + " c.classid = a.classid and su.subid = c.subid and c.classid = ?";
 
@@ -30,11 +31,12 @@ public class DetailAttendanceDBContext extends DBContext{
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 DetailAttendance d = new DetailAttendance();
-                d.setClassid(rs.getInt("classid"));  
-                d.setGroupName(rs.getString("groupName"));              
+                d.setClassid(rs.getInt("classid"));
+                d.setStuid(rs.getInt("studentID"));
+                d.setGroupName(rs.getString("groupName"));
                 d.setDate(rs.getDate("date"));
                 d.setSlot(rs.getInt("slot"));
-                d.setStuName(rs.getString("studentName"));  
+                d.setStuName(rs.getString("studentName"));
                 d.setStuCode(rs.getString("studentCode"));
                 d.setPresent(rs.getBoolean("present"));
                 d.setSubName(rs.getString("subName"));
@@ -47,25 +49,26 @@ public class DetailAttendanceDBContext extends DBContext{
         }
         return depts;
     }
-     
- public ArrayList<DetailAttendance> getDetailAttandanceEdit(String classid,String stuID) {
+
+    public ArrayList<DetailAttendance> getDetailAttandanceEdit(String classid, String stuID) {
         ArrayList<DetailAttendance> depts = new ArrayList<>();
         try {
-            String sql = "select c.classid, g.groupName, c.date,c.slot,s.studentName,s.studentCode,a.present,su.subName, c.className from Class c,"
+            String sql = "select c.classid,a.studentID, g.groupName, c.date,c.slot,s.studentName,s.studentCode,a.present,su.subName, c.className from Class c,"
                     + " Student s, Subject su,Attandance a,[Group] g where s.studentID = a.studentID and g.groupid = s.groupid and"
-                    + " c.classid = a.classid and su.subid = c.subid and c.classid = ? and s.studentID = ?";
+                    + " c.classid = a.classid and su.subid = c.subid and a.classid = ? and a.studentID = ?";
 
             PreparedStatement stm = connection.prepareStatement(sql);
             stm.setString(1, classid);
-            stm.setString(2, stuID);           
+            stm.setString(2, stuID);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 DetailAttendance d = new DetailAttendance();
-                d.setClassid(rs.getInt("classid"));  
-                d.setGroupName(rs.getString("groupName"));              
+                d.setClassid(rs.getInt("classid"));
+                d.setStuid(rs.getInt("studentID"));
+                d.setGroupName(rs.getString("groupName"));
                 d.setDate(rs.getDate("date"));
                 d.setSlot(rs.getInt("slot"));
-                d.setStuName(rs.getString("studentName"));  
+                d.setStuName(rs.getString("studentName"));
                 d.setStuCode(rs.getString("studentCode"));
                 d.setPresent(rs.getBoolean("present"));
                 d.setSubName(rs.getString("subName"));
@@ -77,5 +80,20 @@ public class DetailAttendanceDBContext extends DBContext{
             Logger.getLogger(ClassDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
         return depts;
+    }
+
+    public void update(DetailAttendance de) {
+        try {
+            String sql = "UPDATE [dbo].[Attandance]\n"
+                    + "    SET   [present] = ?\n"
+                    + " WHERE studentID= ? and classid=?";
+            PreparedStatement stm = connection.prepareStatement(sql);        
+            stm.setBoolean(1, de.isPresent());    
+            stm.setInt(2, de.getStuid());  
+            stm.setInt(3, de.getClassid());  
+            stm.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(StudentDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

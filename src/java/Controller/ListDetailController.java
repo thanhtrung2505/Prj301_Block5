@@ -8,20 +8,19 @@ package Controller;
 import dal.DetailAttendanceDBContext;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Date;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.DetailAttendance;
-import model.Student;
 
 /**
  *
  * @author Do Phong PC
  */
-public class EditAttendanceController extends HttpServlet {
+public class ListDetailController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,18 +33,18 @@ public class EditAttendanceController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet EditAttendanceController</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet EditAttendanceController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        String clid = "";
+        Cookie[] a = request.getCookies();
+        for (Cookie cookie : a) {
+            if (cookie.getName().equals("id")) {
+                clid = cookie.getValue();
+            }
+        }
+        DetailAttendanceDBContext clDB = new DetailAttendanceDBContext();
+        ArrayList<DetailAttendance> detailAt = (ArrayList<DetailAttendance>) clDB.getDetailAttandanceClass(clid);
+        if (detailAt.size() > 0) {
+            request.setAttribute("detailAt", detailAt);
+            request.getRequestDispatcher("/attandance/detail.jsp").forward(request, response);
         }
     }
 
@@ -61,15 +60,8 @@ public class EditAttendanceController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ArrayList<DetailAttendance> s = DB.getDetailAttandanceEdit(request.getParameter("classid"), request.getParameter("stuid"));
-        if (s.size() < 0) {
-            response.getWriter().println("error");
-        } else {
-            request.setAttribute("edit", s);
-            request.getRequestDispatcher("/attandance/edit.jsp").forward(request, response);
-        }
+        processRequest(request, response);
     }
-    DetailAttendanceDBContext DB = new DetailAttendanceDBContext();
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -81,14 +73,8 @@ public class EditAttendanceController extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {            
-        DetailAttendance s = new  DetailAttendance();
-        s.setClassid(Integer.parseInt(request.getParameter("classid")));      
-        s.setStuid(Integer.parseInt(request.getParameter("stuid")));    
-        s.setPresent(request.getParameter("present")!=null);  
-        DetailAttendanceDBContext deDB = new DetailAttendanceDBContext();
-        deDB.update(s);      
-        response.sendRedirect("listdetail");
+            throws ServletException, IOException {
+        processRequest(request, response);
     }
 
     /**

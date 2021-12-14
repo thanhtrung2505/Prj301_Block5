@@ -16,33 +16,34 @@
         <%ArrayList<DetailAttendance> DetailClass = (ArrayList<DetailAttendance>) request.getAttribute("edit");%>
     </head>
     <body>
-        <form method="POST" action="add">
+        <form method="POST" action="edit">
             <table border="1px">
-                 <% for (DetailAttendance x : DetailClass) {%>   
+                <% for (DetailAttendance x : DetailClass) {%>   
+                <input type="hidden" name="classid" value="<%=x.getClassid()%>" />
+                <input type="hidden" name="stuid" value="<%=x.getStuid() %>" />
                 <tr>
                     <td>Group</td>
                     <td><%=x.getGroupName()%></td>
                 </tr>                
                 <tr>
                     <td>Date</td>
-                    <td> <input type="date" value="<%=x.getDate()%>" /></td>             
+                    <td><%=x.getDate()%></td>             
                 </tr>
                 <tr>
                     <td>Slot</td>
-                    <td><%=x.getStuName()%></td>
+                    <td><%=x.getSlot()%> </td>
                 </tr
                 <tr>
                     <td>Student</td>
-                    <td><%=x.getSlot()%> </td>
-                </tr>
+                    <td><%=x.getStuName()%></td>       
                 <tr>
-                    <td>Code</td>
-                    <td><%=x.getStuCode()%></td>
+                </tr>
+                <td>Code</td>
+                <td><%=x.getStuCode()%></td>
                 </tr>
                 <tr>
                     <td>Present</td> 
-                <input type="checkbox" 
-                       <%=x.isPresent() ? "checked=\"checked\"" : ""%>  /></td>
+                    <td><input name="present" value="ispresent" type="checkbox"<%=x.isPresent() ? "checked=\"checked\"" : ""%>  /></td>
                 </tr>
                 <tr>
                     <td>Subject</td>
@@ -53,8 +54,9 @@
                     <td><%=x.getClassName()%></td>  
                 </tr> 
                 <%}%>
-            </table>          
-        </form>
-        <input type="submit" value="Return" onclick="window.location.href = 'http://localhost:43899/Prj301_Block5/list'"/>
+            </table>    
+             <input type="submit" value="Save" />
+        </form>      
+        <input type="submit" value="Return" />
     </body>
 </html>
