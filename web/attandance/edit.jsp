@@ -56,7 +56,6 @@
                 <%}%>
             </table>    
              <input type="submit" value="Save" />
-        </form>      
-        <input type="submit" value="Return" />
+        </form>          
     </body>
 </html>

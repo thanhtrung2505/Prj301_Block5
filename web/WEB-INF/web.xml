@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     <servlet>
-        <servlet-name>AttandanceController</servlet-name>
+        <servlet-name>ListStudentController</servlet-name>
         <servlet-class>Controller.ListStudentController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>AttandanceController1</servlet-name>
+        <servlet-name>AttandanceController</servlet-name>
         <servlet-class>Controller.AttendanceController</servlet-class>
     </servlet>
     <servlet>
@@ -17,11 +17,11 @@
         <servlet-class>Controller.ListDetailController</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>AttandanceController</servlet-name>
+        <servlet-name>ListStudentController</servlet-name>
         <url-pattern>/list</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>AttandanceController1</servlet-name>
+        <servlet-name>AttandanceController</servlet-name>
         <url-pattern>/attan</url-pattern>
     </servlet-mapping>
     <servlet-mapping>

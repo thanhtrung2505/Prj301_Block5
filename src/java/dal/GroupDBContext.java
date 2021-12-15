@@ -40,4 +40,22 @@ public class GroupDBContext extends DBContext {
         return depts;
     }
     
+     public String getGroupNameByID(String id) {
+       String name ="";
+        try {
+
+            String sql = "SELECT [groupName]\n"  
+                    + "  FROM [dbo].[Group] where groupid = "+id+"";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Group d = new Group();        
+                name +=rs.getString("groupName");
+                
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ClassDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return name;
+    }
 }

@@ -30,7 +30,6 @@
                     <td>Subject</td>
                     <td>Room</td> 
                     <td>Edit</td> 
-
                 </tr>
                 <% for (DetailAttendance x : DetailClass) {%>     
                 <tr>
@@ -47,7 +46,7 @@
                     <td><%=x.getClassName()%></td>   
                      <td>
                         <input type="button" value="Edit" onclick="window.location.href='edit?classid=<%=x.getClassid()%>&stuid=<%=x.getStuid()%>'"/> 
-                     <td>
+                     </td>
                 </tr>
                 <%}%>
             </table>          
